@@ -74,13 +74,13 @@ export function Form() {
         <div className="field">
           <label
             className={errors.loanAccountNumber ? 'error' : ''}
-            htmlFor="loan-account-number"
+            htmlFor="loanAccountNumber"
           >
             Loan Account Number
           </label>
           <input
             type="text"
-            id="loan-account-number"
+            id="loanAccountNumber"
             value={values.loanAccountNumber}
             onChange={onChange}
           />
@@ -90,7 +90,7 @@ export function Form() {
             <div className="field">
               <label
                 className={errors.accountType ? 'error' : ''}
-                htmlFor="account-type"
+                htmlFor="accountType"
               >
                 Type of Account
               </label>
@@ -108,7 +108,7 @@ export function Form() {
                   onChange={onChange}
                   checked={values.debitCard === 'on'}
                 />
-                <label htmlFor="debit-card">Debit Card</label>
+                <label htmlFor="debitCard">Debit Card</label>
               </div>
             </div>
             {values.checking === 'on' ? (
@@ -157,14 +157,14 @@ function Checking({ errors, values, onChange }: CheckingProps) {
     <>
       <div className="field">
         <label
-          htmlFor="routing-number"
+          htmlFor="routingNumber"
           className={errors.routingNumber ? 'error' : ''}
         >
           Routing Number
         </label>
         <input
           type="text"
-          id="routing-number"
+          id="routingNumber"
           value={values.routingNumber}
           onChange={onChange}
         />
@@ -172,13 +172,13 @@ function Checking({ errors, values, onChange }: CheckingProps) {
       <div className="field">
         <label
           className={errors.bankAccountNumber ? 'error' : ''}
-          htmlFor="bank-account-number"
+          htmlFor="bankAccountNumber"
         >
           Bank Account Number
         </label>
         <input
           type="text"
-          id="bank-account-number"
+          id="bankAccountNumber"
           value={values.bankAccountNumber}
           onChange={onChange}
         />
@@ -186,13 +186,13 @@ function Checking({ errors, values, onChange }: CheckingProps) {
       <div className="field">
         <label
           className={errors.confirmBankAccountNumber ? 'error' : ''}
-          htmlFor="confirm-bank-account-number"
+          htmlFor="confirmBankAccountNumber"
         >
           Confirm Bank Account Number
         </label>
         <input
           type="text"
-          id="confirm-bank-account-number"
+          id="confirmBankAccountNumber"
           value={values.confirmBankAccountNumber}
           onChange={onChange}
         />
@@ -221,14 +221,14 @@ function DebitCard({ errors, values, onChange }: DebitCardProps) {
     <>
       <div className="field">
         <label
-          htmlFor="card-number"
+          htmlFor="cardNumber"
           className={errors.cardNumber ? 'error' : ''}
         >
           Card Number
         </label>
         <input
           type="text"
-          id="card-number"
+          id="cardNumber"
           value={values.cardNumber}
           onChange={onChange}
         />
@@ -236,13 +236,13 @@ function DebitCard({ errors, values, onChange }: DebitCardProps) {
       <div className="field">
         <label
           className={errors.nameOnCard ? 'error' : ''}
-          htmlFor="name-on-card"
+          htmlFor="nameOnCard"
         >
           Name on Card
         </label>
         <input
           type="text"
-          id="name-on-card"
+          id="nameOnCard"
           value={values.nameOnCard}
           onChange={onChange}
         />
@@ -251,13 +251,13 @@ function DebitCard({ errors, values, onChange }: DebitCardProps) {
         <div className="field">
           <label
             className={errors.expirationDate ? 'error' : ''}
-            htmlFor="expiration-date"
+            htmlFor="expirationDate"
           >
             Expiration Date
           </label>
           <input
             type="text"
-            id="expiration-date"
+            id="expirationDate"
             value={values.expirationDate}
             onChange={onChange}
           />
