@@ -24,6 +24,7 @@ export function DebitCard({ errors, values, onChange }: DebitCardProps) {
         <input
           type="number"
           maxLength={16}
+          minLength={16}
           id="card"
           value={values.card}
           onChange={onChange}
@@ -65,6 +66,7 @@ export function DebitCard({ errors, values, onChange }: DebitCardProps) {
           <input
             type="number"
             maxLength={3}
+            minLength={3}
             id="cvv"
             value={values.cvv}
             onChange={onChange}

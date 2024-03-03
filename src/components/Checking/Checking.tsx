@@ -22,6 +22,7 @@ export function Checking({ errors, values, onChange }: CheckingProps) {
         <input
           type="number"
           maxLength={9}
+          minLength={9}
           id="routing"
           value={values.routing}
           onChange={onChange}
@@ -37,6 +38,7 @@ export function Checking({ errors, values, onChange }: CheckingProps) {
         <input
           type="number"
           maxLength={10}
+          minLength={10}
           id="bankAccount"
           value={values.bankAccount}
           onChange={onChange}
@@ -52,6 +54,7 @@ export function Checking({ errors, values, onChange }: CheckingProps) {
         <input
           type="number"
           maxLength={10}
+          minLength={10}
           id="confirmBankAccount"
           value={values.confirmBankAccount}
           onChange={onChange}
