@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import check from '../../assets/check.png'
 import cvv from '../../assets/cvv.png'
 import './Form.css'
@@ -28,20 +28,23 @@ export function Form() {
   }
   const [errors, setErrors] = useState(initialErrors)
 
-  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const id = event.target.id
-    const value = event.target.value
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const id = event.target.id
+      const value = event.target.value
 
-    if (id === 'checking') {
-      setValues({ ...values, checking: 'on', debitCard: '' })
-    } else if (id === 'debitCard') {
-      setValues({ ...values, debitCard: 'on', checking: '' })
-    } else {
-      setValues({ ...values, [id]: value })
-    }
-  }
+      if (id === 'checking') {
+        setValues({ ...values, checking: 'on', debitCard: '' })
+      } else if (id === 'debitCard') {
+        setValues({ ...values, debitCard: 'on', checking: '' })
+      } else {
+        setValues({ ...values, [id]: value })
+      }
+    },
+    [values]
+  )
 
-  function onSubmit() {
+  const onSubmit = useCallback(() => {
     const {
       loanAccount,
       checking,
@@ -93,7 +96,7 @@ export function Form() {
     }
     setErrors(initialErrors)
     // there would be a try/catch with a fetch request here to send the form data to the server
-  }
+  }, [values, initialErrors])
 
   return (
     <div className="Form">
