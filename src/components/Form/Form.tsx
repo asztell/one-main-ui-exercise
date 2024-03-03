@@ -5,36 +5,33 @@ import './Form.css'
 
 export function Form() {
   const [values, setValues] = useState({
-    loanAccountNumber: '',
-    // accountType: '',
+    loanAccount: '',
     checking: 'on',
     debitCard: '',
-    routingNumber: '',
-    bankAccountNumber: '',
-    confirmBankAccountNumber: '',
-    cardNumber: '',
+    routing: '',
+    bankAccount: '',
+    confirmBankAccount: '',
+    card: '',
     nameOnCard: '',
     expirationDate: '',
     cvv: ''
   })
-  const [errors, setErrors] = useState({
-    loanAccountNumber: false,
-    accountType: false,
-    routingNumber: false,
-    bankAccountNumber: false,
-    confirmBankAccountNumber: false,
-    cardNumber: false,
+  const initialErrors = {
+    loanAccount: false,
+    routing: false,
+    bankAccount: false,
+    confirmBankAccount: false,
+    card: false,
     nameOnCard: false,
     expirationDate: false,
     cvv: false
-  })
+  }
+  const [errors, setErrors] = useState(initialErrors)
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const id = event.target.id
     const value = event.target.value
-    console.log('id:', id, 'value:', value)
-    console.log('values:', values)
-    console.log('id === checking:', id === 'checking')
+
     if (id === 'checking') {
       setValues({ ...values, checking: 'on', debitCard: '' })
     } else if (id === 'debitCard') {
@@ -45,25 +42,57 @@ export function Form() {
   }
 
   function onSubmit() {
-    const newErrors =
-      values.checking === 'on'
-        ? {
-            ...errors,
-            loanAccountNumber: values.loanAccountNumber === '',
-            routingNumber: values.routingNumber === '',
-            bankAccountNumber: values.bankAccountNumber === '',
-            confirmBankAccountNumber: values.confirmBankAccountNumber === ''
-          }
-        : {
-            ...errors,
-            cardNumber: values.cardNumber === '',
-            nameOnCard: values.nameOnCard === '',
-            expirationDate: values.expirationDate === '',
-            cvv: values.cvv === ''
-          }
-    setErrors(newErrors)
-    // there would be a fetch request here to send the form data to the server
-    console.log('Form submitted:', values)
+    const {
+      loanAccount,
+      checking,
+      routing,
+      bankAccount,
+      confirmBankAccount,
+      card,
+      nameOnCard,
+      expirationDate,
+      cvv
+    } = values
+    let newErrors
+    let request
+
+    if (checking === 'on') {
+      newErrors = {
+        ...initialErrors,
+        loanAccount: loanAccount === '',
+        routing: routing === '',
+        bankAccount: bankAccount === '',
+        confirmBankAccount: confirmBankAccount === ''
+      }
+      request = {
+        loanAccount,
+        routing,
+        bankAccount
+      }
+    } else {
+      newErrors = {
+        ...initialErrors,
+        loanAccount: loanAccount === '',
+        card: card === '',
+        nameOnCard: nameOnCard === '',
+        expirationDate: expirationDate === '',
+        cvv: cvv === ''
+      }
+      request = {
+        loanAccount,
+        card,
+        nameOnCard,
+        expirationDate,
+        cvv
+      }
+    }
+    console.log('request:', request)
+    if (Object.values(newErrors).includes(true)) {
+      setErrors(newErrors)
+      return
+    }
+    setErrors(initialErrors)
+    // there would be a try/catch with a fetch request here to send the form data to the server
   }
 
   return (
@@ -73,27 +102,22 @@ export function Form() {
       <form>
         <div className="field">
           <label
-            className={errors.loanAccountNumber ? 'error' : ''}
-            htmlFor="loanAccountNumber"
+            className={errors.loanAccount ? 'error' : ''}
+            htmlFor="loanAccount"
           >
             Loan Account Number
           </label>
           <input
             type="text"
-            id="loanAccountNumber"
-            value={values.loanAccountNumber}
+            id="loanAccount"
+            value={values.loanAccount}
             onChange={onChange}
           />
         </div>
         <div className="split">
           <div className="split-left">
             <div className="field">
-              <label
-                className={errors.accountType ? 'error' : ''}
-                htmlFor="accountType"
-              >
-                Type of Account
-              </label>
+              <label htmlFor="accountType">Type of Account</label>
               <div className="radio-group">
                 <input
                   type="radio"
@@ -140,14 +164,14 @@ export function Form() {
 
 type CheckingProps = {
   errors: {
-    routingNumber: boolean
-    bankAccountNumber: boolean
-    confirmBankAccountNumber: boolean
+    routing: boolean
+    bankAccount: boolean
+    confirmBankAccount: boolean
   }
   values: {
-    routingNumber: string
-    bankAccountNumber: string
-    confirmBankAccountNumber: string
+    routing: string
+    bankAccount: string
+    confirmBankAccount: string
   }
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -156,44 +180,41 @@ function Checking({ errors, values, onChange }: CheckingProps) {
   return (
     <>
       <div className="field">
-        <label
-          htmlFor="routingNumber"
-          className={errors.routingNumber ? 'error' : ''}
-        >
+        <label htmlFor="routing" className={errors.routing ? 'error' : ''}>
           Routing Number
         </label>
         <input
           type="text"
-          id="routingNumber"
-          value={values.routingNumber}
+          id="routing"
+          value={values.routing}
           onChange={onChange}
         />
       </div>
       <div className="field">
         <label
-          className={errors.bankAccountNumber ? 'error' : ''}
-          htmlFor="bankAccountNumber"
+          htmlFor="bankAccount"
+          className={errors.bankAccount ? 'error' : ''}
         >
           Bank Account Number
         </label>
         <input
           type="text"
-          id="bankAccountNumber"
-          value={values.bankAccountNumber}
+          id="bankAccount"
+          value={values.bankAccount}
           onChange={onChange}
         />
       </div>
       <div className="field">
         <label
-          className={errors.confirmBankAccountNumber ? 'error' : ''}
-          htmlFor="confirmBankAccountNumber"
+          htmlFor="confirmBankAccount"
+          className={errors.confirmBankAccount ? 'error' : ''}
         >
           Confirm Bank Account Number
         </label>
         <input
           type="text"
-          id="confirmBankAccountNumber"
-          value={values.confirmBankAccountNumber}
+          id="confirmBankAccount"
+          value={values.confirmBankAccount}
           onChange={onChange}
         />
       </div>
@@ -202,13 +223,13 @@ function Checking({ errors, values, onChange }: CheckingProps) {
 }
 type DebitCardProps = {
   errors: {
-    cardNumber: boolean
+    card: boolean
     nameOnCard: boolean
     expirationDate: boolean
     cvv: boolean
   }
   values: {
-    cardNumber: string
+    card: string
     nameOnCard: string
     expirationDate: string
     cvv: string
@@ -220,18 +241,10 @@ function DebitCard({ errors, values, onChange }: DebitCardProps) {
   return (
     <>
       <div className="field">
-        <label
-          htmlFor="cardNumber"
-          className={errors.cardNumber ? 'error' : ''}
-        >
+        <label htmlFor="card" className={errors.card ? 'error' : ''}>
           Card Number
         </label>
-        <input
-          type="text"
-          id="cardNumber"
-          value={values.cardNumber}
-          onChange={onChange}
-        />
+        <input type="text" id="card" value={values.card} onChange={onChange} />
       </div>
       <div className="field">
         <label
@@ -256,7 +269,7 @@ function DebitCard({ errors, values, onChange }: DebitCardProps) {
             Expiration Date
           </label>
           <input
-            type="text"
+            type="date"
             id="expirationDate"
             value={values.expirationDate}
             onChange={onChange}
