@@ -121,6 +121,7 @@ export function Form() {
           </label>
           <input
             type="number"
+            maxLength={10}
             id="loanAccount"
             value={values.loanAccount}
             onChange={onChange}
