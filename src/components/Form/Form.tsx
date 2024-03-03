@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import check from '../../assets/check.png'
 import cvv from '../../assets/cvv.png'
 import './Form.css'
@@ -16,16 +16,19 @@ export function Form() {
     expirationDate: '',
     cvv: ''
   })
-  const initialErrors = {
-    loanAccount: false,
-    routing: false,
-    bankAccount: false,
-    confirmBankAccount: false,
-    card: false,
-    nameOnCard: false,
-    expirationDate: false,
-    cvv: false
-  }
+  const initialErrors = useMemo(
+    () => ({
+      loanAccount: false,
+      routing: false,
+      bankAccount: false,
+      confirmBankAccount: false,
+      card: false,
+      nameOnCard: false,
+      expirationDate: false,
+      cvv: false
+    }),
+    []
+  )
   const [errors, setErrors] = useState(initialErrors)
 
   const onChange = useCallback(
