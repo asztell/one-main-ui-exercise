@@ -10,9 +10,10 @@ type CheckingProps = {
     confirmBankAccount: string
   }
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
-export function Checking({ errors, values, onChange }: CheckingProps) {
+export function Checking({ errors, values, onChange, onBlur }: CheckingProps) {
   return (
     <>
       <div className="field">
@@ -24,6 +25,7 @@ export function Checking({ errors, values, onChange }: CheckingProps) {
           id="routing"
           value={values.routing}
           onChange={onChange}
+          onBlur={onBlur}
         />
       </div>
       <div className="field">
@@ -38,6 +40,7 @@ export function Checking({ errors, values, onChange }: CheckingProps) {
           id="bankAccount"
           value={values.bankAccount}
           onChange={onChange}
+          onBlur={onBlur}
         />
       </div>
       <div className="field">
@@ -52,6 +55,7 @@ export function Checking({ errors, values, onChange }: CheckingProps) {
           id="confirmBankAccount"
           value={values.confirmBankAccount}
           onChange={onChange}
+          onBlur={onBlur}
         />
       </div>
     </>

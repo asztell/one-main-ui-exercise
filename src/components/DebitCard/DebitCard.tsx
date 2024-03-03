@@ -12,9 +12,15 @@ type DebitCardProps = {
     cvv: string
   }
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
-export function DebitCard({ errors, values, onChange }: DebitCardProps) {
+export function DebitCard({
+  errors,
+  values,
+  onChange,
+  onBlur
+}: DebitCardProps) {
   return (
     <>
       <div className="field">
@@ -26,6 +32,7 @@ export function DebitCard({ errors, values, onChange }: DebitCardProps) {
           id="card"
           value={values.card}
           onChange={onChange}
+          onBlur={onBlur}
         />
       </div>
       <div className="field">
@@ -40,6 +47,7 @@ export function DebitCard({ errors, values, onChange }: DebitCardProps) {
           id="nameOnCard"
           value={values.nameOnCard}
           onChange={onChange}
+          onBlur={onBlur}
         />
       </div>
       <div className="half-field">
@@ -55,6 +63,7 @@ export function DebitCard({ errors, values, onChange }: DebitCardProps) {
             id="expirationDate"
             value={values.expirationDate}
             onChange={onChange}
+            onBlur={onBlur}
           />
         </div>
         <div className="field">
@@ -66,6 +75,7 @@ export function DebitCard({ errors, values, onChange }: DebitCardProps) {
             id="cvv"
             value={values.cvv}
             onChange={onChange}
+            onBlur={onBlur}
           />
         </div>
       </div>

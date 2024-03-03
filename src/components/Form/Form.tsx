@@ -53,6 +53,19 @@ export function Form() {
     [values]
   )
 
+  const onBlur = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      const { id, value } = event.target
+
+      if (!validate[id as keyof typeof validate](value)) {
+        setErrors({ ...errors, [id]: true })
+      } else {
+        setErrors({ ...errors, [id]: false })
+      }
+    },
+    [errors]
+  )
+
   const onSubmit = useCallback(() => {
     const {
       loanAccount,
@@ -71,10 +84,10 @@ export function Form() {
     if (checking === 'on') {
       newErrors = {
         ...initialErrors,
-        loanAccount: validate.loanAccount(loanAccount),
-        routing: validate.routing(routing),
-        bankAccount: validate.bankAccount(bankAccount),
-        confirmBankAccount: validate.bankAccount(confirmBankAccount)
+        loanAccount: !validate.loanAccount(loanAccount),
+        routing: !validate.routing(routing),
+        bankAccount: !validate.bankAccount(bankAccount),
+        confirmBankAccount: !validate.bankAccount(confirmBankAccount)
       }
       request = {
         loanAccount,
@@ -84,11 +97,11 @@ export function Form() {
     } else {
       newErrors = {
         ...initialErrors,
-        loanAccount: validate.loanAccount(loanAccount),
-        card: validate.card(card),
-        nameOnCard: validate.nameOnCard(nameOnCard),
-        expirationDate: expirationDate === '',
-        cvv: validate.cvv(cvv)
+        loanAccount: !validate.loanAccount(loanAccount),
+        card: !validate.card(card),
+        nameOnCard: !validate.nameOnCard(nameOnCard),
+        expirationDate: !validate.expirationDate(expirationDate),
+        cvv: !validate.cvv(cvv)
       }
       request = {
         loanAccount,
@@ -99,11 +112,12 @@ export function Form() {
       }
     }
     console.log('request:', request)
+    console.log('newErrors:', newErrors)
     if (Object.values(newErrors).includes(true)) {
       setErrors(newErrors)
       return
     }
-    setErrors(initialErrors)
+    // setErrors(initialErrors)
     // there would be a try/catch with a fetch request here to send the form data to the server
   }, [values, initialErrors])
 
@@ -124,6 +138,7 @@ export function Form() {
             id="loanAccount"
             value={values.loanAccount}
             onChange={onChange}
+            onBlur={onBlur}
           />
         </div>
         <div className="split">
@@ -148,9 +163,19 @@ export function Form() {
               </div>
             </div>
             {values.checking === 'on' ? (
-              <Checking errors={errors} values={values} onChange={onChange} />
+              <Checking
+                errors={errors}
+                values={values}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
             ) : (
-              <DebitCard errors={errors} values={values} onChange={onChange} />
+              <DebitCard
+                errors={errors}
+                values={values}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
             )}
           </div>
           <div className="split-right">
@@ -159,11 +184,11 @@ export function Form() {
             ) : (
               <p>Where can I find the cvv number?</p>
             )}
-            <img
+            {/* <img
               className={values.debitCard === 'on' ? 'cvv' : 'check'}
               src={values.debitCard === 'on' ? cvv : check}
               alt="routing and account number"
-            />
+            /> */}
           </div>
         </div>
         <div className="submit">
