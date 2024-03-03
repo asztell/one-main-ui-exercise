@@ -3,6 +3,7 @@ import check from '../../assets/check.png'
 import cvv from '../../assets/cvv.png'
 import { Checking } from '../Checking/Checking'
 import { DebitCard } from '../DebitCard/DebitCard'
+import { validate } from '../../utils/validations'
 import './Form.css'
 
 export function Form() {
@@ -39,8 +40,7 @@ export function Form() {
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const id = event.target.id
-      const value = event.target.value
+      const { id, value } = event.target
 
       if (id === 'checking') {
         setValues({ ...values, checking: 'on', debitCard: '' })
@@ -71,10 +71,10 @@ export function Form() {
     if (checking === 'on') {
       newErrors = {
         ...initialErrors,
-        loanAccount: loanAccount === '',
-        routing: routing === '',
-        bankAccount: bankAccount === '',
-        confirmBankAccount: confirmBankAccount === ''
+        loanAccount: validate.loanAccount(loanAccount),
+        routing: validate.routing(routing),
+        bankAccount: validate.bankAccount(bankAccount),
+        confirmBankAccount: validate.bankAccount(confirmBankAccount)
       }
       request = {
         loanAccount,
@@ -84,11 +84,11 @@ export function Form() {
     } else {
       newErrors = {
         ...initialErrors,
-        loanAccount: loanAccount === '',
-        card: card === '',
-        nameOnCard: nameOnCard === '',
+        loanAccount: validate.loanAccount(loanAccount),
+        card: validate.card(card),
+        nameOnCard: validate.nameOnCard(nameOnCard),
         expirationDate: expirationDate === '',
-        cvv: cvv === ''
+        cvv: validate.cvv(cvv)
       }
       request = {
         loanAccount,
@@ -121,7 +121,6 @@ export function Form() {
           </label>
           <input
             type="number"
-            maxLength={10}
             id="loanAccount"
             value={values.loanAccount}
             onChange={onChange}
