@@ -1,21 +1,27 @@
 import { useState, useMemo, useCallback } from 'react'
 import check from '../../assets/check.png'
 import cvv from '../../assets/cvv.png'
+import { Checking } from '../Checking/Checking'
+import { DebitCard } from '../DebitCard/DebitCard'
 import './Form.css'
 
 export function Form() {
-  const [values, setValues] = useState({
-    loanAccount: '',
-    checking: 'on',
-    debitCard: '',
-    routing: '',
-    bankAccount: '',
-    confirmBankAccount: '',
-    card: '',
-    nameOnCard: '',
-    expirationDate: '',
-    cvv: ''
-  })
+  const initialValues = useMemo(
+    () => ({
+      loanAccount: '',
+      checking: 'on',
+      debitCard: '',
+      routing: '',
+      bankAccount: '',
+      confirmBankAccount: '',
+      card: '',
+      nameOnCard: '',
+      expirationDate: '',
+      cvv: ''
+    }),
+    []
+  )
+  const [values, setValues] = useState(initialValues)
   const initialErrors = useMemo(
     () => ({
       loanAccount: false,
@@ -114,7 +120,7 @@ export function Form() {
             Loan Account Number
           </label>
           <input
-            type="text"
+            type="number"
             id="loanAccount"
             value={values.loanAccount}
             onChange={onChange}
@@ -165,129 +171,5 @@ export function Form() {
         </div>
       </form>
     </div>
-  )
-}
-
-type CheckingProps = {
-  errors: {
-    routing: boolean
-    bankAccount: boolean
-    confirmBankAccount: boolean
-  }
-  values: {
-    routing: string
-    bankAccount: string
-    confirmBankAccount: string
-  }
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-}
-
-function Checking({ errors, values, onChange }: CheckingProps) {
-  return (
-    <>
-      <div className="field">
-        <label htmlFor="routing" className={errors.routing ? 'error' : ''}>
-          Routing Number
-        </label>
-        <input
-          type="text"
-          id="routing"
-          value={values.routing}
-          onChange={onChange}
-        />
-      </div>
-      <div className="field">
-        <label
-          htmlFor="bankAccount"
-          className={errors.bankAccount ? 'error' : ''}
-        >
-          Bank Account Number
-        </label>
-        <input
-          type="text"
-          id="bankAccount"
-          value={values.bankAccount}
-          onChange={onChange}
-        />
-      </div>
-      <div className="field">
-        <label
-          htmlFor="confirmBankAccount"
-          className={errors.confirmBankAccount ? 'error' : ''}
-        >
-          Confirm Bank Account Number
-        </label>
-        <input
-          type="text"
-          id="confirmBankAccount"
-          value={values.confirmBankAccount}
-          onChange={onChange}
-        />
-      </div>
-    </>
-  )
-}
-type DebitCardProps = {
-  errors: {
-    card: boolean
-    nameOnCard: boolean
-    expirationDate: boolean
-    cvv: boolean
-  }
-  values: {
-    card: string
-    nameOnCard: string
-    expirationDate: string
-    cvv: string
-  }
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-}
-
-function DebitCard({ errors, values, onChange }: DebitCardProps) {
-  return (
-    <>
-      <div className="field">
-        <label htmlFor="card" className={errors.card ? 'error' : ''}>
-          Card Number
-        </label>
-        <input type="text" id="card" value={values.card} onChange={onChange} />
-      </div>
-      <div className="field">
-        <label
-          className={errors.nameOnCard ? 'error' : ''}
-          htmlFor="nameOnCard"
-        >
-          Name on Card
-        </label>
-        <input
-          type="text"
-          id="nameOnCard"
-          value={values.nameOnCard}
-          onChange={onChange}
-        />
-      </div>
-      <div className="half-field">
-        <div className="field">
-          <label
-            className={errors.expirationDate ? 'error' : ''}
-            htmlFor="expirationDate"
-          >
-            Expiration Date
-          </label>
-          <input
-            type="date"
-            id="expirationDate"
-            value={values.expirationDate}
-            onChange={onChange}
-          />
-        </div>
-        <div className="field">
-          <label className={errors.cvv ? 'error' : ''} htmlFor="cvv">
-            CVV
-          </label>
-          <input type="text" id="cvv" value={values.cvv} onChange={onChange} />
-        </div>
-      </div>
-    </>
   )
 }
