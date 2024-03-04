@@ -134,7 +134,7 @@ input[type="radio"] + label {
   margin-top: 20px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
   .Form {
     width: 90%;
     padding: 5%;
