@@ -3,11 +3,85 @@ import check from '../../assets/check.png'
 import cvv from '../../assets/cvv.png'
 import { Checking } from '../Checking/Checking'
 import { DebitCard } from '../DebitCard/DebitCard'
-import { validate } from '../../utils/validations'
+import { validate, ValidationKey } from '../../utils/validations'
 import './Form.css'
 
+type ValuesKey =
+  | 'loanAccount'
+  | 'checking'
+  | 'debitCard'
+  | 'routing'
+  | 'bankAccount'
+  | 'confirmBankAccount'
+  | 'card'
+  | 'nameOnCard'
+  | 'expirationDate'
+  | 'cvv'
+
+type Values = {
+  loanAccount: string
+  checking: string
+  debitCard: string
+  routing: string
+  bankAccount: string
+  confirmBankAccount: string
+  card: string
+  nameOnCard: string
+  expirationDate: string
+  cvv: string
+}
+
+type ErrorsKey =
+  | 'loanAccount'
+  | 'routing'
+  | 'bankAccount'
+  | 'confirmBankAccount'
+  | 'card'
+  | 'nameOnCard'
+  | 'expirationDate'
+  | 'cvv'
+
+type Errors = {
+  loanAccount: boolean
+  routing: boolean
+  bankAccount: boolean
+  confirmBankAccount: boolean
+  card: boolean
+  nameOnCard: boolean
+  expirationDate: boolean
+  cvv: boolean
+}
+
+const isValuesKey = (key: string): key is ValuesKey => {
+  return [
+    'loanAccount',
+    'checking',
+    'debitCard',
+    'routing',
+    'bankAccount',
+    'confirmBankAccount',
+    'card',
+    'nameOnCard',
+    'expirationDate',
+    'cvv'
+  ].includes(key)
+}
+
+const isValidationKey = (key: string): key is ValidationKey => {
+  return [
+    'loanAccount',
+    'routing',
+    'bankAccount',
+    'confirmBankAccount',
+    'card',
+    'nameOnCard',
+    'expirationDate',
+    'cvv'
+  ].includes(key)
+}
+
 export function Form() {
-  const initialValues = useMemo(
+  const initialValues = useMemo<Values>(
     () => ({
       loanAccount: '',
       checking: 'on',
@@ -22,8 +96,8 @@ export function Form() {
     }),
     []
   )
-  const [values, setValues] = useState(initialValues)
-  const initialErrors = useMemo(
+  const [values, setValues] = useState<Values>(initialValues)
+  const initialErrors = useMemo<Errors>(
     () => ({
       loanAccount: false,
       routing: false,
@@ -36,18 +110,19 @@ export function Form() {
     }),
     []
   )
-  const [errors, setErrors] = useState(initialErrors)
+  const [errors, setErrors] = useState<Errors>(initialErrors)
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { id, value } = event.target
-
-      if (id === 'checking') {
-        setValues({ ...values, checking: 'on', debitCard: '' })
-      } else if (id === 'debitCard') {
-        setValues({ ...values, debitCard: 'on', checking: '' })
-      } else {
-        setValues({ ...values, [id]: value })
+      if (isValuesKey(id)) {
+        if (id === 'checking') {
+          setValues({ ...values, checking: 'on', debitCard: '' })
+        } else if (id === 'debitCard') {
+          setValues({ ...values, debitCard: 'on', checking: '' })
+        } else {
+          setValues({ ...values, [id]: value })
+        }
       }
     },
     [values]
@@ -57,7 +132,7 @@ export function Form() {
     (event: React.FocusEvent<HTMLInputElement>) => {
       const { id, value } = event.target
 
-      if (!validate[id as keyof typeof validate](value)) {
+      if (isValidationKey(id) && !validate[id](value)) {
         setErrors({ ...errors, [id]: true })
       } else {
         setErrors({ ...errors, [id]: false })
@@ -78,13 +153,15 @@ export function Form() {
       expirationDate,
       cvv
     } = values
-    let newErrors
+    let newErrors = {
+      ...initialErrors,
+      loanAccount: !validate.loanAccount(loanAccount)
+    }
     let request
 
     if (checking === 'on') {
       newErrors = {
-        ...initialErrors,
-        loanAccount: !validate.loanAccount(loanAccount),
+        ...newErrors,
         routing: !validate.routing(routing),
         bankAccount: !validate.bankAccount(bankAccount),
         confirmBankAccount: !validate.bankAccount(confirmBankAccount)
@@ -96,8 +173,7 @@ export function Form() {
       }
     } else {
       newErrors = {
-        ...initialErrors,
-        loanAccount: !validate.loanAccount(loanAccount),
+        ...newErrors,
         card: !validate.card(card),
         nameOnCard: !validate.nameOnCard(nameOnCard),
         expirationDate: !validate.expirationDate(expirationDate),
@@ -128,7 +204,7 @@ export function Form() {
       <form>
         <div className="field">
           <label
-            className={errors.loanAccount ? 'error' : ''}
+            className={errors.loanAccount ? 'has-error' : ''}
             htmlFor="loanAccount"
           >
             Loan Account Number
@@ -140,8 +216,11 @@ export function Form() {
             onChange={onChange}
             onBlur={onBlur}
           />
+          <span className={errors.loanAccount ? 'error-message' : 'hide'}>
+            Loan Account Number is required
+          </span>
         </div>
-        <div className="split">
+        <div className="split-container">
           <div className="split-left">
             <div className="field">
               <label htmlFor="accountType">Type of Account</label>
@@ -184,11 +263,11 @@ export function Form() {
             ) : (
               <p>Where can I find the cvv number?</p>
             )}
-            {/* <img
+            <img
               className={values.debitCard === 'on' ? 'cvv' : 'check'}
               src={values.debitCard === 'on' ? cvv : check}
               alt="routing and account number"
-            /> */}
+            />
           </div>
         </div>
         <div className="submit">

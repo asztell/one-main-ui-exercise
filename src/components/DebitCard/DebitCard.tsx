@@ -24,7 +24,7 @@ export function DebitCard({
   return (
     <>
       <div className="field">
-        <label htmlFor="card" className={errors.card ? 'error' : ''}>
+        <label htmlFor="card" className={errors.card ? 'has-error' : ''}>
           Card Number
         </label>
         <input
@@ -34,10 +34,13 @@ export function DebitCard({
           onChange={onChange}
           onBlur={onBlur}
         />
+        <span className={errors.card ? 'error-message' : 'hide'}>
+          Card Number is required
+        </span>
       </div>
       <div className="field">
         <label
-          className={errors.nameOnCard ? 'error' : ''}
+          className={errors.nameOnCard ? 'has-error' : ''}
           htmlFor="nameOnCard"
         >
           Name on Card
@@ -49,11 +52,14 @@ export function DebitCard({
           onChange={onChange}
           onBlur={onBlur}
         />
+        <span className={errors.nameOnCard ? 'error-message' : 'hide'}>
+          Name is required
+        </span>
       </div>
       <div className="half-field">
         <div className="field">
           <label
-            className={errors.expirationDate ? 'error' : ''}
+            className={errors.expirationDate ? 'has-error' : ''}
             htmlFor="expirationDate"
           >
             Expiration Date
@@ -65,9 +71,12 @@ export function DebitCard({
             onChange={onChange}
             onBlur={onBlur}
           />
+          <span className={errors.expirationDate ? 'error-message' : 'hide'}>
+            Expiration Date is required
+          </span>
         </div>
         <div className="field">
-          <label className={errors.cvv ? 'error' : ''} htmlFor="cvv">
+          <label className={errors.cvv ? 'has-error' : ''} htmlFor="cvv">
             CVV
           </label>
           <input
@@ -77,6 +86,9 @@ export function DebitCard({
             onChange={onChange}
             onBlur={onBlur}
           />
+          <span className={errors.cvv ? 'error-message' : 'hide'}>
+            CVV is required
+          </span>
         </div>
       </div>
     </>
