@@ -1,8 +1,11 @@
+import { setLabelClassName, setSpanClassName } from '../../utils/className'
+
 type CheckingProps = {
   errors: {
     routing: boolean
     bankAccount: boolean
     confirmBankAccount: boolean
+    confirmBankAccountMismatch: boolean
   }
   values: {
     routing: string
@@ -13,58 +16,69 @@ type CheckingProps = {
   onBlur: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
-export function Checking({ errors, values, onChange, onBlur }: CheckingProps) {
+export function Checking({ values, errors, onChange, onBlur }: CheckingProps) {
+  const { routing, bankAccount, confirmBankAccount } = values
+  const {
+    routing: routingError,
+    bankAccount: bankAccountError,
+    confirmBankAccount: confirmBankAccountError,
+    confirmBankAccountMismatch
+  } = errors
+
   return (
     <>
       <div className="field">
-        <label htmlFor="routing" className={errors.routing ? 'has-error' : ''}>
+        <label htmlFor="routing" className={setLabelClassName(routingError)}>
           Routing Number
         </label>
         <input
           type="number"
           id="routing"
-          value={values.routing}
+          value={routing}
           onChange={onChange}
           onBlur={onBlur}
         />
-        <span className={errors.routing ? 'error-message' : 'hide'}>
-          Routing Number is required
+        <span className={setSpanClassName(routingError)}>
+          Valid Routing Number is required
         </span>
       </div>
       <div className="field">
         <label
           htmlFor="bankAccount"
-          className={errors.bankAccount ? 'has-error' : ''}
+          className={setLabelClassName(bankAccountError)}
         >
           Bank Account Number
         </label>
         <input
           type="number"
           id="bankAccount"
-          value={values.bankAccount}
+          value={bankAccount}
           onChange={onChange}
           onBlur={onBlur}
         />
-        <span className={errors.bankAccount ? 'error-message' : 'hide'}>
-          Bank Account Number is required
+        <span className={setSpanClassName(bankAccountError)}>
+          Valid Bank Account Number is required
         </span>
       </div>
       <div className="field">
         <label
           htmlFor="confirmBankAccount"
-          className={errors.confirmBankAccount ? 'has-error' : ''}
+          className={setLabelClassName(confirmBankAccountError)}
         >
           Confirm Bank Account Number
         </label>
         <input
           type="number"
           id="confirmBankAccount"
-          value={values.confirmBankAccount}
+          value={confirmBankAccount}
           onChange={onChange}
           onBlur={onBlur}
         />
-        <span className={errors.confirmBankAccount ? 'error-message' : 'hide'}>
-          Confirm Bank Account Number is required
+        <span className={setSpanClassName(confirmBankAccountError)}>
+          Valid Confirm Bank Account Number is required
+        </span>
+        <span className={setSpanClassName(confirmBankAccountMismatch)}>
+          Confirm Bank Account Number must match Bank Account Number
         </span>
       </div>
     </>

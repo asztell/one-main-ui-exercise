@@ -4,6 +4,7 @@ import cvv from '../../assets/cvv.png'
 import { Checking } from '../Checking/Checking'
 import { DebitCard } from '../DebitCard/DebitCard'
 import { validate, ValidationKey } from '../../utils/validations'
+import { setLabelClassName, setSpanClassName } from '../../utils/className'
 import './Form.css'
 
 type ValuesKey =
@@ -31,21 +32,12 @@ type Values = {
   cvv: string
 }
 
-type ErrorsKey =
-  | 'loanAccount'
-  | 'routing'
-  | 'bankAccount'
-  | 'confirmBankAccount'
-  | 'card'
-  | 'nameOnCard'
-  | 'expirationDate'
-  | 'cvv'
-
 type Errors = {
   loanAccount: boolean
   routing: boolean
   bankAccount: boolean
   confirmBankAccount: boolean
+  confirmBankAccountMismatch: boolean
   card: boolean
   nameOnCard: boolean
   expirationDate: boolean
@@ -103,6 +95,7 @@ export function Form() {
       routing: false,
       bankAccount: false,
       confirmBankAccount: false,
+      confirmBankAccountMismatch: false,
       card: false,
       nameOnCard: false,
       expirationDate: false,
@@ -164,7 +157,8 @@ export function Form() {
         ...newErrors,
         routing: !validate.routing(routing),
         bankAccount: !validate.bankAccount(bankAccount),
-        confirmBankAccount: !validate.bankAccount(confirmBankAccount)
+        confirmBankAccount: !validate.confirmBankAccount(confirmBankAccount),
+        confirmBankAccountMismatch: bankAccount !== confirmBankAccount
       }
       request = {
         loanAccount,
@@ -197,6 +191,9 @@ export function Form() {
     // there would be a try/catch with a fetch request here to send the form data to the server
   }, [values, initialErrors])
 
+  const { loanAccount, checking, debitCard } = values
+  const { loanAccount: loanAccountError } = errors
+
   return (
     <div className="Form">
       <h2>One-time Loan Payment</h2>
@@ -204,7 +201,7 @@ export function Form() {
       <form>
         <div className="field">
           <label
-            className={errors.loanAccount ? 'has-error' : ''}
+            className={setLabelClassName(loanAccountError)}
             htmlFor="loanAccount"
           >
             Loan Account Number
@@ -212,12 +209,12 @@ export function Form() {
           <input
             type="number"
             id="loanAccount"
-            value={values.loanAccount}
+            value={loanAccount}
             onChange={onChange}
             onBlur={onBlur}
           />
-          <span className={errors.loanAccount ? 'error-message' : 'hide'}>
-            Loan Account Number is required
+          <span className={setSpanClassName(loanAccountError)}>
+            Valid Loan Account Number is required
           </span>
         </div>
         <div className="split-container">
@@ -229,51 +226,59 @@ export function Form() {
                   type="radio"
                   id="checking"
                   onChange={onChange}
-                  checked={values.checking === 'on'}
+                  checked={checking === 'on'}
                 />
                 <label htmlFor="checking">Checking</label>
                 <input
                   type="radio"
                   id="debitCard"
                   onChange={onChange}
-                  checked={values.debitCard === 'on'}
+                  checked={debitCard === 'on'}
                 />
                 <label htmlFor="debitCard">Debit Card</label>
               </div>
             </div>
-            {values.checking === 'on' ? (
+            {checking === 'on' ? (
               <Checking
-                errors={errors}
                 values={values}
+                errors={errors}
                 onChange={onChange}
                 onBlur={onBlur}
               />
             ) : (
               <DebitCard
-                errors={errors}
                 values={values}
+                errors={errors}
                 onChange={onChange}
                 onBlur={onBlur}
               />
             )}
           </div>
           <div className="split-right">
-            {values.checking === 'on' ? (
-              <p>Where can I find the routing and account number?</p>
-            ) : (
-              <p>Where can I find the cvv number?</p>
-            )}
-            <img
-              className={values.debitCard === 'on' ? 'cvv' : 'check'}
-              src={values.debitCard === 'on' ? cvv : check}
-              alt="routing and account number"
-            />
+            <Information checking={checking} />
           </div>
         </div>
         <div className="submit">
           <input type="button" value="MAKE PAYMENT" onClick={onSubmit} />
         </div>
       </form>
+    </div>
+  )
+}
+
+function Information({ checking }: { checking: string }) {
+  return (
+    <div>
+      {checking === 'on' ? (
+        <p>Where can I find the routing and account number?</p>
+      ) : (
+        <p>Where can I find the cvv number?</p>
+      )}
+      <img
+        className={checking === 'on' ? 'check' : 'cvv'}
+        src={checking === 'on' ? check : cvv}
+        alt="routing and account number"
+      />
     </div>
   )
 }

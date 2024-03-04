@@ -1,3 +1,5 @@
+import { setLabelClassName, setSpanClassName } from '../../utils/className'
+
 type DebitCardProps = {
   errors: {
     card: boolean
@@ -16,31 +18,39 @@ type DebitCardProps = {
 }
 
 export function DebitCard({
-  errors,
   values,
+  errors,
   onChange,
   onBlur
 }: DebitCardProps) {
+  const { card, nameOnCard, expirationDate, cvv } = values
+  const {
+    card: cardError,
+    nameOnCard: nameOnCardError,
+    expirationDate: expirationDateError,
+    cvv: cvvError
+  } = errors
+
   return (
     <>
       <div className="field">
-        <label htmlFor="card" className={errors.card ? 'has-error' : ''}>
+        <label htmlFor="card" className={setLabelClassName(cardError)}>
           Card Number
         </label>
         <input
           type="number"
           id="card"
-          value={values.card}
+          value={card}
           onChange={onChange}
           onBlur={onBlur}
         />
-        <span className={errors.card ? 'error-message' : 'hide'}>
-          Card Number is required
+        <span className={setSpanClassName(cardError)}>
+          Valid Card Number is required
         </span>
       </div>
       <div className="field">
         <label
-          className={errors.nameOnCard ? 'has-error' : ''}
+          className={setLabelClassName(nameOnCardError)}
           htmlFor="nameOnCard"
         >
           Name on Card
@@ -48,18 +58,18 @@ export function DebitCard({
         <input
           type="text"
           id="nameOnCard"
-          value={values.nameOnCard}
+          value={nameOnCard}
           onChange={onChange}
           onBlur={onBlur}
         />
-        <span className={errors.nameOnCard ? 'error-message' : 'hide'}>
-          Name is required
+        <span className={setSpanClassName(nameOnCardError)}>
+          Valid Name is required
         </span>
       </div>
       <div className="half-field">
         <div className="field">
           <label
-            className={errors.expirationDate ? 'has-error' : ''}
+            className={setLabelClassName(expirationDateError)}
             htmlFor="expirationDate"
           >
             Expiration Date
@@ -67,27 +77,27 @@ export function DebitCard({
           <input
             type="date"
             id="expirationDate"
-            value={values.expirationDate}
+            value={expirationDate}
             onChange={onChange}
             onBlur={onBlur}
           />
-          <span className={errors.expirationDate ? 'error-message' : 'hide'}>
-            Expiration Date is required
+          <span className={setSpanClassName(expirationDateError)}>
+            Valid Expiration Date is required
           </span>
         </div>
         <div className="field">
-          <label className={errors.cvv ? 'has-error' : ''} htmlFor="cvv">
+          <label className={setLabelClassName(cvvError)} htmlFor="cvv">
             CVV
           </label>
           <input
             type="number"
             id="cvv"
-            value={values.cvv}
+            value={cvv}
             onChange={onChange}
             onBlur={onBlur}
           />
-          <span className={errors.cvv ? 'error-message' : 'hide'}>
-            CVV is required
+          <span className={setSpanClassName(cvvError)}>
+            Valid CVV is required
           </span>
         </div>
       </div>

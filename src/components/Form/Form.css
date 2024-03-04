@@ -30,6 +30,10 @@ input[type="button"] {
 }
 input[type="radio"] {
   accent-color: #0076f8;
+  cursor: pointer;
+}
+input[type="radio"] + label {
+  cursor: pointer;
 }
 .split-container {
   display: flex;
@@ -109,8 +113,8 @@ input[type="radio"] {
     my preferred method would be
     to use visibility: hidden;
     as it would maintain the
-    vertical the space
-    for better user experience
+    vertical space for better
+    user experience
    */
   /* visibility: hidden; */
 }
